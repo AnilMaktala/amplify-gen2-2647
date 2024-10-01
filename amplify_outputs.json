@@ -1,9 +1,10 @@
 {
   "auth": {
-    "user_pool_id": "us-east-1_qCXqT75ho",
-    "aws_region": "us-east-1",
-    "user_pool_client_id": "2to2spbj1uj5enijl489ko5emp",
-    "identity_pool_id": "us-east-1:578666d5-68d8-4efd-b67e-60e02d92e538",
+    "user_pool_id": "us-west-2_baJoZ5SNn",
+    "aws_region": "us-west-2",
+    "user_pool_client_id": "6tr7504dpp11c9oba3jh8gvajm",
+    "identity_pool_id": "us-west-2:5db972fb-d32a-42d9-b030-4b1b23b215b0",
+    "mfa_methods": [],
     "standard_required_attributes": [
       "email"
     ],
@@ -13,29 +14,30 @@
     "user_verification_types": [
       "email"
     ],
+    "mfa_configuration": "NONE",
     "password_policy": {
       "min_length": 8,
-      "require_numbers": true,
       "require_lowercase": true,
-      "require_uppercase": true,
-      "require_symbols": true
+      "require_numbers": true,
+      "require_symbols": true,
+      "require_uppercase": true
     },
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://ephqiposwzbptnhj7vtws2ebfu.appsync-api.us-east-1.amazonaws.com/graphql",
-    "aws_region": "us-east-1",
-    "api_key": "da2-uaxd3utbbvcgxokz3ujlgoxz6u",
-    "default_authorization_type": "API_KEY",
+    "url": "https://laijg4mvtfaljbrfvch6emwgym.appsync-api.us-west-2.amazonaws.com/graphql",
+    "aws_region": "us-west-2",
+    "api_key": "da2-mezyaeivbzfizf24h4ccppsmmi",
+    "default_authorization_type": "AWS_IAM",
     "authorization_types": [
-      "AMAZON_COGNITO_USER_POOLS",
-      "AWS_IAM"
+      "API_KEY",
+      "AMAZON_COGNITO_USER_POOLS"
     ],
     "model_introspection": {
       "version": 1,
       "models": {
-        "User": {
-          "name": "User",
+        "UserProfile": {
+          "name": "UserProfile",
           "fields": {
             "id": {
               "name": "id",
@@ -44,76 +46,25 @@
               "isRequired": true,
               "attributes": []
             },
-            "birthdate": {
-              "name": "birthdate",
-              "isArray": false,
-              "type": "String",
-              "isRequired": true,
-              "attributes": []
-            },
-            "firstName": {
-              "name": "firstName",
-              "isArray": false,
-              "type": "String",
-              "isRequired": true,
-              "attributes": []
-            },
-            "lastName": {
-              "name": "lastName",
-              "isArray": false,
-              "type": "String",
-              "isRequired": true,
-              "attributes": []
-            },
-            "username": {
-              "name": "username",
-              "isArray": false,
-              "type": "String",
-              "isRequired": true,
-              "attributes": []
-            },
-            "phoneNumber": {
-              "name": "phoneNumber",
-              "isArray": false,
-              "type": {
-                "model": "PhoneNumber"
-              },
-              "isRequired": false,
-              "attributes": [],
-              "association": {
-                "connectionType": "HAS_ONE",
-                "associatedWith": [
-                  "userId"
-                ],
-                "targetNames": []
-              }
-            },
-            "pushToken": {
-              "name": "pushToken",
+            "email": {
+              "name": "email",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "profileImage": {
-              "name": "profileImage",
-              "isArray": false,
-              "type": "AWSURL",
-              "isRequired": false,
-              "attributes": []
-            },
-            "profileImageBlurhash": {
-              "name": "profileImageBlurhash",
+            "profileOwner": {
+              "name": "profileOwner",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "searchTerm": {
-              "name": "searchTerm",
+            "kdnr": {
+              "name": "kdnr",
               "isArray": false,
-              "type": "String",
-              "isRequired": true,
+              "type": "Int",
+              "isRequired": false,
               "attributes": []
             },
             "createdAt": {
@@ -134,38 +85,21 @@
             }
           },
           "syncable": true,
-          "pluralName": "Users",
+          "pluralName": "UserProfiles",
           "attributes": [
             {
               "type": "model",
               "properties": {}
             },
             {
-              "type": "key",
-              "properties": {
-                "fields": [
-                  "id"
-                ]
-              }
-            },
-            {
-              "type": "key",
-              "properties": {
-                "name": "usersBySearchTermAndId",
-                "queryField": "listUsersBySearchTerm",
-                "fields": [
-                  "searchTerm",
-                  "id"
-                ]
-              }
-            },
-            {
               "type": "auth",
               "properties": {
                 "rules": [
                   {
-                    "allow": "public",
-                    "provider": "apiKey",
+                    "provider": "userPools",
+                    "ownerField": "profileOwner",
+                    "allow": "owner",
+                    "identityClaim": "cognito:username",
                     "operations": [
                       "create",
                       "update",
@@ -183,37 +117,22 @@
             "sortKeyFieldNames": []
           }
         },
-        "PhoneNumber": {
-          "name": "PhoneNumber",
+        "AtomicCounter": {
+          "name": "AtomicCounter",
           "fields": {
-            "phoneNumber": {
-              "name": "phoneNumber",
+            "id": {
+              "name": "id",
               "isArray": false,
-              "type": "String",
+              "type": "ID",
               "isRequired": true,
               "attributes": []
             },
-            "userId": {
-              "name": "userId",
+            "value": {
+              "name": "value",
               "isArray": false,
-              "type": "String",
-              "isRequired": true,
-              "attributes": []
-            },
-            "user": {
-              "name": "user",
-              "isArray": false,
-              "type": {
-                "model": "User"
-              },
+              "type": "Int",
               "isRequired": false,
-              "attributes": [],
-              "association": {
-                "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "userId"
-                ]
-              }
+              "attributes": []
             },
             "createdAt": {
               "name": "createdAt",
@@ -233,7 +152,7 @@
             }
           },
           "syncable": true,
-          "pluralName": "PhoneNumbers",
+          "pluralName": "AtomicCounters",
           "attributes": [
             {
               "type": "model",
@@ -243,7 +162,7 @@
               "type": "key",
               "properties": {
                 "fields": [
-                  "phoneNumber"
+                  "id"
                 ]
               }
             },
@@ -252,8 +171,7 @@
               "properties": {
                 "rules": [
                   {
-                    "allow": "public",
-                    "provider": "apiKey",
+                    "allow": "private",
                     "operations": [
                       "create",
                       "update",
@@ -266,34 +184,14 @@
             }
           ],
           "primaryKeyInfo": {
-            "isCustomPrimaryKey": true,
-            "primaryKeyFieldName": "phoneNumber",
+            "isCustomPrimaryKey": false,
+            "primaryKeyFieldName": "id",
             "sortKeyFieldNames": []
           }
         }
       },
       "enums": {},
-      "nonModels": {},
-      "queries": {
-        "checkBatchOfPhoneNumbersForActiveUsers": {
-          "name": "checkBatchOfPhoneNumbersForActiveUsers",
-          "isArray": true,
-          "type": {
-            "model": "PhoneNumber"
-          },
-          "isRequired": false,
-          "isArrayNullable": true,
-          "arguments": {
-            "phoneNumbers": {
-              "name": "phoneNumbers",
-              "isArray": true,
-              "type": "String",
-              "isRequired": false,
-              "isArrayNullable": true
-            }
-          }
-        }
-      }
+      "nonModels": {}
     }
   },
   "version": "1"

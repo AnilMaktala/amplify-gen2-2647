@@ -21,6 +21,16 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "amplify/data/increment-like.ts",
+    "amplify/functions/rest-auth",
+    "amplify/data/getPost.js",
+    "amplify/data/addPost.js"
+  ],
   "exclude": ["node_modules"]
 }
